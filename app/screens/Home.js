@@ -1,10 +1,11 @@
 import React from "react";
-import { View, ImageBackground, Image, Text, Button, StyleSheet } from "react-native";
+import { View, Text, Button, StyleSheet, StatusBar, KeyboardAvoidingView } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
 export default function Home({ navigation }){
     return (
         <View style={styles.container}>
+            <StatusBar barStyle={'light-content'}/>
              <LinearGradient
                 // Background Linear Gradient
                 colors={['#03045E', '#0077B6']}
@@ -22,7 +23,7 @@ export default function Home({ navigation }){
             </View>
             <View style={styles.register}>
                 <Button
-                    title='register'
+                    title='sign up'
                     color='#0077B6'/>
             </View>
         </View>
@@ -31,6 +32,7 @@ export default function Home({ navigation }){
 
 const styles = StyleSheet.create({
     container: {
+        display: 'flex',
         flex: 1,
         alignItems: 'center',
     },
