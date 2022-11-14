@@ -8,31 +8,26 @@ import {
     KeyboardAvoidingView,
     TouchableWithoutFeedback,
     Keyboard,
- } from "react-native";
-
-// import Icon from 'react-native-vector-icons/AntDesign';
+} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { SafeAreaView } from "react-native-safe-area-context";
+// import Icon from 'react-native-vector-icons/AntDesign';
 
-import Constants from "expo-constants";
-const { manifest } = Constants;
-const BASE_API_URL = `http://${manifest.debuggerHost.split(':').shift()}:5001`;
+import { logIn } from "../utils/api";
 
 export default function Login({ navigation }){
 // --- hooks ---
     const [username, setUsername] = useState(null)
     const [password, setPassword] = useState(null)
+    const [err, setErr] = useState(null)
 
 // --- handlers ---
-    const handleLogin = async() => {
-        try{
-            const url = `${BASE_API_URL}/users/login/?username=${username}&password=${password}`
-            let res = await fetch(url)
-            let data = await res.text()
-            console.log(data)
-        }catch (err){
-            console.error(err)
-        }
+    const handleLogin = () => {
+        // setErr(null)
+        logIn(username, password)
+            .then((user)=>{
+                navigation.navigate("Dashboard", {user: user})
+            })
+            .catch(setErr)
     };
 
 // --- return ---
@@ -46,6 +41,7 @@ export default function Login({ navigation }){
                 
                 <KeyboardAvoidingView behavior="position" style={styles.secondaryContainer}>
                     <Text style={styles.heading}>Login</Text>
+                    {err && <Text style={styles.err}>{err}</Text>}
                     <TextInput
                         style={styles.usernameInput}
                         onChangeText={setUsername}
@@ -137,4 +133,9 @@ const styles = StyleSheet.create({
         width: 250,
         padding: 18,
     },
+    err:{
+        color: 'gray',
+        textAlign: 'center',
+        marginBottom: 10
+    }
 })
