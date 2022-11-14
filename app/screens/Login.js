@@ -9,14 +9,33 @@ import {
     TouchableWithoutFeedback,
     Keyboard,
  } from "react-native";
+
 // import Icon from 'react-native-vector-icons/AntDesign';
 import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import Constants from "expo-constants";
+const { manifest } = Constants;
+const BASE_API_URL = `http://${manifest.debuggerHost.split(':').shift()}:5001`;
+
 export default function Login({ navigation }){
+// --- hooks ---
     const [username, setUsername] = useState(null)
     const [password, setPassword] = useState(null)
 
+// --- handlers ---
+    const handleLogin = async() => {
+        try{
+            const url = `${BASE_API_URL}/users/login/?username=${username}&password=${password}`
+            let res = await fetch(url)
+            let data = await res.text()
+            console.log(data)
+        }catch (err){
+            console.error(err)
+        }
+    };
+
+// --- return ---
     return(
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={styles.container}>
@@ -49,7 +68,7 @@ export default function Login({ navigation }){
                         <View style={styles.button}>
                             <Button 
                                 title='login'
-                                onPress={()=>console.log('logging in!')}/>
+                                onPress={handleLogin}/>
                         </View>
                     </View>
                 </KeyboardAvoidingView>
