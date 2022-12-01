@@ -2,6 +2,8 @@ const { manifest } = Constants;
 import Constants from "expo-constants";
 
 const BASE_API_URL = `http://${manifest.debuggerHost.split(':').shift()}:5001`;
+const headers = new Headers();
+headers.append("Content-Type", "application/json");
 
 export function logIn(username, password){
     const url = `${BASE_API_URL}/users/login/?username=${username}&password=${password}`
@@ -19,6 +21,39 @@ export function logIn(username, password){
         })
 };
 
-export function getPlaylists(userId){
-    const url = `${BASE_API_URL}/playlists/`
+export function register(data){
+    const url = `${BASE_API_URL}/users/register`
+    return fetch(url, {
+        headers,
+        method: "POST", 
+        body: JSON.stringify({data}),
+    })
+        .then(res => res.json())
+        .then(res => {
+            if(res.error){
+                throw res.error
+            }else{
+                console.log(res)
+                return res
+            }
+        })
+        .catch(err => {
+            throw err
+        })
+};
+
+export function getPlaylists(user_id){
+    const url = `${BASE_API_URL}/users/${user_id}/playlists`
+    return fetch(url)
+        .then(res => res.json())
+        .then(res => {
+            if(res.error){
+                throw res.error
+            }else{
+                return res.data
+            }
+        })
+        .catch(err => {
+            throw err
+        })
 };
