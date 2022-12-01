@@ -13,6 +13,7 @@ import { LinearGradient } from "expo-linear-gradient";
 // import Icon from 'react-native-vector-icons/AntDesign';
 
 import { logIn } from "../utils/api";
+import { storeUser } from "../utils/storedUser";
 
 export default function Login({ navigation }){
 // --- hooks ---
@@ -22,10 +23,11 @@ export default function Login({ navigation }){
 
 // --- handlers ---
     const handleLogin = () => {
-        // setErr(null)
+        setErr(null)
         logIn(username, password)
-            .then((user)=>{
-                navigation.navigate("Dashboard", {user: user})
+            .then(({ data })=>{
+                storeUser(username, password)
+                navigation.navigate("Dashboard", {user: data})
             })
             .catch(setErr)
     };
@@ -46,6 +48,7 @@ export default function Login({ navigation }){
                         style={styles.usernameInput}
                         onChangeText={setUsername}
                         value={username}
+                        autoCapitalize="none"
                         placeholder="username"
                         placeholderTextColor='gray'/>
                     <TextInput
