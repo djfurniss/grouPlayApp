@@ -1,0 +1,26 @@
+{
+  "cli": {
+    "version": ">= 2.8.0"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "channel": "main"
+    },
+    "preview": {
+      "distribution": "internal",
+      "env": {
+          "BASE_API_URL": "https://grouplaybackend.onrender.com"
+      },
+      "channel": "main",
+      "ios": {
+        "simulator": true
+      }
+    },
+    "production": {}
+  },
+  "submit": {
+    "production": {}
+  }
+}

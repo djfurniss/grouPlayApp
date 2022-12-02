@@ -1,7 +1,10 @@
-const { manifest } = Constants;
 import Constants from "expo-constants";
+const { manifest } = Constants;
 
-const BASE_API_URL = `http://${manifest.debuggerHost.split(':').shift()}:5001`;
+// const BASE_API_URL = `http://${manifest.debuggerHost.split(':').shift()}:5001`;
+let BASE_API_URL = process.env.NODE_ENV === "development" ? `http://${manifest.debuggerHost.split(':').shift()}:5001` : process.env.BASE_API_URL
+console.log(BASE_API_URL)
+
 const headers = new Headers();
 headers.append("Content-Type", "application/json");
 
