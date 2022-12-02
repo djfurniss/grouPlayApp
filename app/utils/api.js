@@ -2,8 +2,10 @@ import Constants from "expo-constants";
 const { manifest } = Constants;
 
 // const BASE_API_URL = `http://${manifest.debuggerHost.split(':').shift()}:5001`;
-let BASE_API_URL = process.env.NODE_ENV === "development" ? `http://${manifest.debuggerHost.split(':').shift()}:5001` : process.env.BASE_API_URL
-console.log(BASE_API_URL)
+// let BASE_API_URL = process.env.NODE_ENV === "development" ? `http://${manifest.debuggerHost.split(':').shift()}:5001` : process.env.BASE_API_URL
+
+// const BASE_API_URL = Constants.expoConfig.extra.BASE_API_URL // !not working
+const BASE_API_URL = "https://grouplaybackend.onrender.com"
 
 const headers = new Headers();
 headers.append("Content-Type", "application/json");

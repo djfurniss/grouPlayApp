@@ -6,7 +6,10 @@
     "development": {
       "developmentClient": true,
       "distribution": "internal",
-      "channel": "main"
+      "channel": "main",
+      "env": {
+        "BASE_API_URL": "https://grouplaybackend.onrender.com"
+      }
     },
     "preview": {
       "distribution": "internal",
