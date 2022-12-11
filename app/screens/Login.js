@@ -1,33 +1,29 @@
-import React, { useState } from "react";
-import { 
-    View, 
-    StyleSheet, 
-    Text, 
-    Button, 
-    TextInput, 
-    KeyboardAvoidingView,
-    TouchableWithoutFeedback,
-    Keyboard,
-} from "react-native";
+import React, { useState, useContext } from "react";
+import { View, StyleSheet, Text, Button, TextInput, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-// import Icon from 'react-native-vector-icons/AntDesign';
+import { UserContext } from "../contexts/UserContext";
 
 import { logIn } from "../utils/api";
 import { storeUser } from "../utils/storedUser";
 
 export default function Login({ navigation }){
+    const { setUser } = useContext(UserContext)
 // --- hooks ---
-    const [username, setUsername] = useState(null)
+    const [user_name, setUser_name] = useState(null)
     const [password, setPassword] = useState(null)
     const [err, setErr] = useState(null)
 
 // --- handlers ---
     const handleLogin = () => {
         setErr(null)
-        logIn(username, password)
+        const loginData = {user_name, password}
+        logIn(loginData)
             .then(({ data })=>{
-                storeUser(username, password)
-                navigation.navigate("Dashboard", {user: data})
+                storeUser(user_name, password)
+                setUser(data)
+                setUser_name(null)
+                setPassword(null)
+                navigation.navigate("Dashboard")
             })
             .catch(setErr)
     };
@@ -46,8 +42,8 @@ export default function Login({ navigation }){
                     {err && <Text style={styles.err}>{err}</Text>}
                     <TextInput
                         style={styles.usernameInput}
-                        onChangeText={setUsername}
-                        value={username}
+                        onChangeText={setUser_name}
+                        value={user_name}
                         autoCapitalize="none"
                         placeholder="username"
                         placeholderTextColor='gray'/>
