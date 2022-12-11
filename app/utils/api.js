@@ -1,23 +1,30 @@
-import Constants from "expo-constants";
-const { manifest } = Constants;
+// import Constants from "expo-constants";
+// const { manifest } = Constants;;
 
-// const BASE_API_URL = `http://${manifest.debuggerHost.split(':').shift()}:5001`;
-// let BASE_API_URL = process.env.NODE_ENV === "development" ? `http://${manifest.debuggerHost.split(':').shift()}:5001` : process.env.BASE_API_URL
-
-// const BASE_API_URL = Constants.expoConfig.extra.BASE_API_URL // !not working
-const BASE_API_URL = "https://grouplaybackend.onrender.com"
+// const BASE_API_URL = `http://${manifest.debuggerHost.split(':').shift()}:5001`; // !stopped working
+const BASE_API_URL = 'https://grumpy-pens-check-99-131-23-93.loca.lt'
 
 const headers = new Headers();
 headers.append("Content-Type", "application/json");
+headers.append("Bypass-Tunnel-Reminder", "true");
 
-export function logIn(username, password){
-    const url = `${BASE_API_URL}/users/login/?username=${username}&password=${password}`
-    return fetch(url)
+/**
+ * 
+ * @param {} data : object
+ */
+export function logIn(data){
+    const url = `${BASE_API_URL}/users/login`
+    return fetch(url, {
+        headers,
+        method: "PUT", 
+        body: JSON.stringify({data}),
+    })
         .then(res => res.json())
         .then(res => {
             if(res.error){
                 throw res.error
             }else{
+                // console.log(res)
                 return res
             }
         })
@@ -38,7 +45,7 @@ export function register(data){
             if(res.error){
                 throw res.error
             }else{
-                console.log(res)
+                // console.log(res)
                 return res
             }
         })
@@ -56,6 +63,24 @@ export function getPlaylists(user_id){
                 throw res.error
             }else{
                 return res.data
+            }
+        })
+        .catch(err => {
+            throw err
+        })
+};
+
+export function test(){
+    const url = `${BASE_API_URL}/test`
+    console.log("making a call to: ", url)
+    return fetch(url, headers)
+        .then(res => res.json())
+        .then(res => console.log(res.data))
+        .then(res => {
+            if(res.error){
+                throw res.error
+            }else{
+                return res
             }
         })
         .catch(err => {
