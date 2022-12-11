@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { SafeAreaView, View, Text, StyleSheet } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
+import { UserContext } from "../contexts/UserContext";
 import { getPlaylists } from "../utils/api";
+import { LinearGradient } from "expo-linear-gradient";
+import { Icon } from '@rneui/themed';
+import { Button } from "@rneui/base";
 
-export default function Dashboard({ route }){
-    const { user } = route.params
+export default function Dashboard({ navigation }){
+    const { user, playlists, setPlaylists } = useContext(UserContext)
     const [isLoading, setIsLoading] = useState(false);
-    const [playlists, setPlaylists] = useState([]);
 
     useEffect(()=>{
         setIsLoading(true)
@@ -17,6 +19,7 @@ export default function Dashboard({ route }){
 
         loadDashboard();
     }, [])
+
 // --- return ---
     return( 
         <SafeAreaView style={styles.container}>
@@ -30,11 +33,23 @@ export default function Dashboard({ route }){
             <View style={styles.playlistContainer}>
                 {playlists.length ? playlists.map(playlist => {
                     return (
-                        <View key={playlist.playlist_id} style={styles.playlist}>
-                            <Text>{playlist.playlist_name}</Text>
+                        <View 
+                            key={playlist.playlist_id} 
+                            style={styles.playlist}>
+                            <Text 
+                                style={styles.playlistText}
+                                onPress={()=>navigation.navigate("Playlist")}
+                                >{playlist.playlist_name}</Text>
                         </View>
                     )
                 }): <Text>Add your first playlist!</Text>}
+            </View>
+
+            <View style={styles.addCont}>
+                {/* <Text style={styles.addText}>Add</Text> */}
+                <Icon name="add-outline" type="ionicon" color={'#fff'} onPress={()=>{
+                    navigation.navigate("New")
+                }}/>
             </View>
                 
         </SafeAreaView>
@@ -59,6 +74,24 @@ const styles = StyleSheet.create({
         fontSize: 40,
         marginTop: 30,
     },
+    addCont: {
+        marginTop: 30,
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    add: {
+        alignSelf: 'flex-end',
+        borderWidth: 1,
+        marginTop: 10,
+        marginRight: 30,
+        borderColor: '#fff',
+        borderRadius: '50%',
+        padding: 3,
+    },
+    addText: {
+        color: '#fff'
+    },
     playlistContainer: {
         alignSelf: 'stretch',
         display: 'flex',
@@ -74,4 +107,8 @@ const styles = StyleSheet.create({
         padding: 10,
         height: 100,
     },
+    playlistText: {
+        // backgroundColor: 'red',
+        height: '100%'
+    }
 })
