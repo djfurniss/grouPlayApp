@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { 
     View, 
     StyleSheet, 
@@ -10,6 +10,7 @@ import {
     Keyboard,
     SafeAreaView
 } from "react-native";
+import { UserContext } from "../contexts/UserContext";
 import { LinearGradient } from "expo-linear-gradient";
 
 import { register, logIn } from "../utils/api"; // onsubmit
@@ -17,6 +18,7 @@ import { storeUser } from "../utils/storedUser";
 
 
 export default function Register({ navigation }){
+    const { setUser } = useContext(UserContext)
     useEffect(()=>setErr(null), [])
     const [user_name, setUsername] = useState(null)
     const [password, setPassword] = useState(null)
@@ -32,7 +34,8 @@ export default function Register({ navigation }){
             storeUser(user_name, password)
             logIn(user_name, password)
             .then(()=>{
-                navigation.navigate("Dashboard", {user: data})
+                setUser(data)
+                navigation.navigate("Dashboard")
             })
         })
         .catch((error) =>{
