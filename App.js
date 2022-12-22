@@ -16,7 +16,7 @@ const Tab = createBottomTabNavigator();
   
 export default function App() {
     // ? is there a way to get the linear gradient higher up so I don't have to declare it on everypage's styling?? 
-    const [user, setUser] = useState(null)
+    const [user, setUser] = useState({})
     const [playlists, setPlaylists] = useState([])
 
     return(
@@ -31,10 +31,23 @@ export default function App() {
                     }, tabBarShowLabel: false}} 
                     backBehavior={'history'}>
                     <Tab.Screen name="Home" component={Home} options={{tabBarStyle: {display:'none'}, tabBarItemStyle: {display: 'none'}}}/>
+                    <Tab.Screen 
+                        name="New"
+                        component={New}
+                        options={
+                            {tabBarStyle: 
+                                {display: 'flex', 
+                                position: 'absolute', 
+                                backgroundColor: '#00000050',
+                                borderTopWidth: 0,
+                                },
+                            tabBarIcon: ({focused}) => <Icon name="add-circle-outline" type="ionicon" color={focused ? '#fff' : "#ffffff80"}/>,
+                        }
+                    }/>
                     <Tab.Screen name="Login" component={Login} options={{tabBarStyle: {display:'none'}, tabBarItemStyle: {display: 'none'}}}/>
                     <Tab.Screen name="Register" component={Register} options={{tabBarStyle: {display:'none'}, tabBarItemStyle: {display: 'none'}}}/>
                     
-                    <Tab.Screen 
+                    {/* <Tab.Screen 
                         name="Friends" 
                         component={Friends} 
                         options={
@@ -45,7 +58,7 @@ export default function App() {
                                 borderTopWidth: 0,
                             },
                         tabBarIcon: () => <Icon name="people-outline" type="ionicon" color={'#fff'}/>
-                            }}/>
+                            }}/> */}
 
                     <Tab.Screen 
                         name="Dashboard" 
@@ -58,7 +71,7 @@ export default function App() {
                                 borderTopWidth: 0,
                             },
                     
-                        tabBarIcon: () => <Icon name="home-outline" type="ionicon" color={'#fff'}/>
+                        tabBarIcon: ({focused}) => <Icon name="home-outline" type="ionicon" color={focused ? '#fff' : "#ffffff80"}/>
                         }}/>
                     
                     <Tab.Screen 
@@ -71,12 +84,8 @@ export default function App() {
                                 backgroundColor: '#00000050',
                                 borderTopWidth: 0,
                             },
-                        tabBarIcon: () => <Icon name="settings-outline" type="ionicon" color={'#fff'}/>
+                        tabBarIcon: ({focused}) => <Icon name="settings-outline" type="ionicon" color={focused ? '#fff' : "#ffffff80"}/>
                             }}/>
-                    <Tab.Screen 
-                        name="New"
-                        component={New}
-                        options={{tabBarItemStyle: {display: 'none'}}}/>
 
                     <Tab.Screen 
                         name="Playlist"

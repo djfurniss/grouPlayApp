@@ -1,15 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { SafeAreaView, View, StyleSheet, Text } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
 export default function Friends(){
+    // useEffect(()=>{
+    //     console.log("useEffect")
+    // }, [])
+
     return (
         <SafeAreaView style={styles.container}>
             <LinearGradient
                     // Background Linear Gradient
                     colors={['#03045E', '#0077B6']}
                     style={styles.background}/>
-            <Text>Friend's List</Text>
+            <Text style={styles.pageName}>Friend's List</Text>
         </SafeAreaView>
     )
 };
@@ -27,4 +31,9 @@ const styles = StyleSheet.create({
            top: 0,
            bottom: 0,
        },
+       pageName: {
+        color: '#aaa',
+        alignSelf: 'flex-start',
+        marginLeft: 20,
+    },
    })

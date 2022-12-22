@@ -1,24 +1,27 @@
 import React, { useEffect, useState, useContext } from "react";
-import { SafeAreaView, View, Text, StyleSheet } from "react-native";
+import { SafeAreaView, View, Text, StyleSheet, ActivityIndicator } from "react-native";
 import { UserContext } from "../contexts/UserContext";
 import { getPlaylists } from "../utils/api";
 import { LinearGradient } from "expo-linear-gradient";
-import { Icon } from '@rneui/themed';
-import { Button } from "@rneui/base";
+// import { Icon } from '@rneui/themed';
 
 export default function Dashboard({ navigation }){
     const { user, playlists, setPlaylists } = useContext(UserContext)
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(()=>{
         setIsLoading(true)
         const loadDashboard = async() => {
             getPlaylists(user.user_id)
-                .then(setPlaylists)
-        };
-
-        loadDashboard();
-    }, [])
+            .then(({data}) => setPlaylists(data))
+            .catch((err)=>{
+                // return setIsLoading(true)
+            })
+            };
+        
+        user.user_name && loadDashboard();
+        setIsLoading(false)
+    }, [user])
 
 // --- return ---
     return( 
@@ -29,29 +32,34 @@ export default function Dashboard({ navigation }){
                 style={styles.background}/>
 
             <Text style={styles.name}>grouPlay</Text>
+            {isLoading ? 
+            <ActivityIndicator size="large" style={styles.loader}/>
+            :
+            <View style={styles.screen}>
 
-            <View style={styles.playlistContainer}>
-                {playlists.length ? playlists.map(playlist => {
-                    return (
-                        <View 
-                            key={playlist.playlist_id} 
-                            style={styles.playlist}>
-                            <Text 
-                                style={styles.playlistText}
-                                onPress={()=>navigation.navigate("Playlist")}
-                                >{playlist.playlist_name}</Text>
-                        </View>
-                    )
-                }): <Text>Add your first playlist!</Text>}
-            </View>
+                <View style={styles.playlistContainer}>
+                    {playlists.length ? playlists.map(playlist => {
+                        return (
+                            <View
+                                key={playlist.playlist_id} 
+                                style={styles.playlist}>
+                                <Text 
+                                    style={styles.playlistText}
+                                    onPress={()=>navigation.navigate("Playlist", {playlist})}
+                                    >{playlist.playlist_name}</Text>
+                            </View>
+                        )
+                    }): <Text></Text>}
+                </View>
 
-            <View style={styles.addCont}>
-                {/* <Text style={styles.addText}>Add</Text> */}
-                <Icon name="add-outline" type="ionicon" color={'#fff'} onPress={()=>{
-                    navigation.navigate("New")
-                }}/>
+                {/* <View style={styles.addCont}> */}
+                    {/* <Text style={styles.addText}>Add</Text> */}
+                    {/* <Icon name="add-outline" type="ionicon" color={'#fff'} onPress={()=>{ */}
+                        {/* navigation.navigate("New") */}
+                    {/* }}/> */}
+                {/* </View> */}
             </View>
-                
+            }   
         </SafeAreaView>
     )
 };
@@ -62,12 +70,21 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         // justifyContent: 'center',
     },
+    loader: {
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+    },
     background: {
         position: 'absolute',
         left: 0,
         right: 0,
         top: 0,
         bottom: 0,
+    },
+    screen: {
+        width: '100%',
+        alignItems: 'center',
     },
     name:{
         color: '#fff',

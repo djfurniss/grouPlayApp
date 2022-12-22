@@ -19,6 +19,7 @@ export default function Login({ navigation }){
         const loginData = {user_name, password}
         logIn(loginData)
             .then(({ data })=>{
+                // console.log(data)
                 storeUser(user_name, password)
                 setUser(data)
                 setUser_name(null)

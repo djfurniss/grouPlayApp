@@ -2,6 +2,9 @@ import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 const {getItem: getPassword, setItem: setPassword, removeItem} = useAsyncStorage("password");
 const {getItem: getUsername, setItem: setUsername} = useAsyncStorage("user_name");
 
+// import { useContext } from 'react';
+// import { UserContext } from '../contexts/UserContext';
+
 
 export async function storeUser(username, password){
     try{
@@ -27,6 +30,9 @@ export async function getStoredUser(){
 export async function logOut(){
     try{
         await removeItem()
+        console.log("logging out from:", user)
+        // setUser(null)
+        // console.log(`user after logging out: ${user}`)
     }catch(error){
         console.error(error)
     }

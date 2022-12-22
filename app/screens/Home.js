@@ -1,41 +1,28 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import { View, Text, Button, StyleSheet, StatusBar, Linking } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { getStoredUser } from "../utils/storedUser";
 import { logIn } from "../utils/api";
-import { UserContext } from "../contexts/UserContext"
+import { UserContext } from "../contexts/UserContext";
 
 export default function Home({ navigation }){
-    const { setUser } = useContext(UserContext)
+    const { user, setUser } = useContext(UserContext)
+    const [err, setErr] = useState(null);
 
     useEffect(()=>{
-        // console.log(window.localStorage)
-        // const CLIENT_ID = "fc77e26dd7e54da399a17ce5607772e1"
-        // const REDIRECT_URI = "exp://192.168.1.182:19000"
-        // const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
-        // const RESPONSE_TYPE = "token"
-
         getStoredUser()
         .then(({username, password})=>{
             if(username && password){
-                // console.log("stored login credentials are being loaded")
-                const data = {user_name: username, password}
-                logIn(data)
-                .then(({data})=> {
-                    // console.log(data)
-                    setUser(data)
-                    navigation.navigate("Dashboard")
-                })
+                console.log("stored login credentials are being loaded")
+                const userData = {user_name: username, password}
+                logIn(userData)
+                .then(({data})=> setUser(data))
+                .then(()=>navigation.navigate("Dashboard"))
+                .catch(setErr)
             }else{
-                // console.log("log in info not stored")
+                console.log("log in info not stored")
             }
         })
-
-        // const spotify = async () => {
-        //     await Linking.openURL(`${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}`)
-        // }
-
-        // spotify();
     },[])
 
 

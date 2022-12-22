@@ -31,8 +31,9 @@ export default function Register({ navigation }){
         setErr(null)
         register({user_name, password, email})
         .then(({ data })=>{
+            console.log(data)
             storeUser(user_name, password)
-            logIn(user_name, password)
+            logIn({user_name, password})
             .then(()=>{
                 setUser(data)
                 navigation.navigate("Dashboard")
